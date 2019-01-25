@@ -9,13 +9,13 @@
 
 #include <TheThingsNetwork.h>
 
-const char *appEui = "";
-const char *appKey = "";
+//const char *appEui = "";
+//const char *appKey = "";
+//
+//#define loraSerial Serial1
+//#define debugSerial Serial
 
-#define loraSerial Serial1
-#define debugSerial Serial
-
-#define freqPlan TTN_FP_EU868
+//#define freqPlan TTN_FP_EU868
 #define SensorPin A2            //pH meter Analog output to Arduino Analog Input 2
 #define Offset 0.00            //deviation compensate
 #define LED 13
@@ -25,12 +25,13 @@ const char *appKey = "";
 int pHArray[ArrayLenth];   //Store the average value of the sensor feedback
 int pHArrayIndex=0;    
 
-TheThingsNetwork ttn(loraSerial, debigSerial, freqPlan);
+//TheThingsNetwork ttn(loraSerial, debigSerial, freqPlan);
+
 
 void setup(void)
 {
-  loraSerial.begin(57600);
-  debugSerial.begin(9600);
+//  loraSerial.begin(57600);
+//  debugSerial.begin(9600);
   
   pinMode(LED,OUTPUT);  
   Serial.begin(9600);  
@@ -57,14 +58,16 @@ void loop(void)
         Serial.print("    pH value: ");
   Serial.println(pHValue,2);
         digitalWrite(LED,digitalRead(LED)^1);
+        float conspH = constrain(pHValue, 4, 10);
+ Serial.println()
+        float pH = map(pHValue, 4, 10, 0, 255);
+        byte payload[1];
+        payload[0]=(byte) pH;
         printTime=millis();
+        }
   }
-  float pH = map(pHValue, 4, 10, 0, 255);
-  byte payload[1];
-  payload[0]=(byte) pH;
 
-  ttn.sendBytes(payload, sizeof(payload));
-}
+//  ttn.sendBytes(payload, sizeof(payload));
 
 double avergearray(int* arr, int number){
   int i;
@@ -105,5 +108,6 @@ double avergearray(int* arr, int number){
   }//if
   return avg;
 }
+
 
 
